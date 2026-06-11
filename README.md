@@ -8,6 +8,12 @@ Repositorio:
 https://github.com/areaofilm/juavila-clube-demo
 ```
 
+Site público instalável:
+
+```text
+https://areaofilm.github.io/juavila-clube-demo/
+```
+
 ## Como abrir o site
 
 Com o servidor local ligado, acesse:

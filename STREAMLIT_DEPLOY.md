@@ -6,6 +6,12 @@ Repositorio:
 https://github.com/areaofilm/juavila-clube-demo
 ```
 
+Site publico para instalar o app:
+
+```text
+https://areaofilm.github.io/juavila-clube-demo/
+```
+
 ## Como publicar
 
 1. Acesse `https://share.streamlit.io/`.
