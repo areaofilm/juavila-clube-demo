@@ -34,6 +34,19 @@ Use a connection string da Neon. O app cria automaticamente as tabelas:
 
 Se `DATABASE_URL` nao existir, o app entra em modo SQLite local apenas para teste.
 
+## Se aparecer erro `sqlalchemy.exc.OperationalError`
+
+Esse erro quase sempre e conexao com a Neon. Confira:
+
+- O Secret esta em `Manage app > Settings > Secrets`.
+- O nome e exatamente `DATABASE_URL`.
+- A URL esta entre aspas.
+- A URL termina com `?sslmode=require`.
+- Voce copiou a connection string completa da Neon.
+- Se a senha tiver caracteres como `@`, `#`, `%`, `/` ou `:`, prefira copiar a string pronta diretamente do painel da Neon.
+
+Depois de corrigir, clique em `Reboot app`.
+
 ## Arquivos que o Streamlit usa
 
 - `streamlit_app.py`: entrada principal do Streamlit, com app, painel admin e banco.

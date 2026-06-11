@@ -5,6 +5,7 @@ import base64
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 import pandas as pd
 import streamlit as st
@@ -23,6 +24,7 @@ from sqlalchemy import (
     text,
 )
 from sqlalchemy.engine import Engine
+from sqlalchemy.exc import OperationalError, SQLAlchemyError
 
 
 ROOT = Path(__file__).parent
@@ -197,16 +199,84 @@ def get_database_url() -> str:
         return f"sqlite:///{ROOT / 'juavila_local.db'}"
 
     if url.startswith("postgres://"):
-        return url.replace("postgres://", "postgresql+psycopg2://", 1)
-    if url.startswith("postgresql://"):
-        return url.replace("postgresql://", "postgresql+psycopg2://", 1)
-    return url
+        url = url.replace("postgres://", "postgresql+psycopg://", 1)
+    elif url.startswith("postgresql://"):
+        url = url.replace("postgresql://", "postgresql+psycopg://", 1)
+    return ensure_sslmode(url)
+
+
+def ensure_sslmode(url: str) -> str:
+    if not url.startswith("postgresql+psycopg://"):
+        return url
+    parts = urlsplit(url)
+    query = dict(parse_qsl(parts.query, keep_blank_values=True))
+    query.setdefault("sslmode", "require")
+    return urlunsplit((parts.scheme, parts.netloc, parts.path, urlencode(query), parts.fragment))
+
+
+def sanitized_database_host() -> str:
+    url = get_database_url()
+    if url.startswith("sqlite"):
+        return "SQLite local"
+    parts = urlsplit(url)
+    return parts.hostname or "host nao identificado"
+
+
+def render_database_error(error: Exception) -> None:
+    st.error("Nao consegui conectar ao banco Neon/PostgreSQL.")
+    st.markdown(
+        f"""
+        **Host configurado:** `{sanitized_database_host()}`
+
+        Confira no Streamlit Cloud em **Manage app > Settings > Secrets**:
+
+        ```toml
+        DATABASE_URL = "postgresql://USUARIO:SENHA@HOST.neon.tech/NOME_DO_BANCO?sslmode=require"
+        ADMIN_PASSWORD = "sua-senha-do-admin"
+        ```
+
+        Pontos que mais causam esse erro:
+
+        - A URL foi colada sem aspas.
+        - A senha da Neon tem caracteres especiais e a URL nao veio codificada.
+        - Foi copiada uma connection string incompleta.
+        - O host, usuario, senha ou nome do banco estao errados.
+        - A string nao tem `?sslmode=require`.
+
+        Depois de corrigir os Secrets, clique em **Reboot app** no Streamlit Cloud.
+        """
+    )
+    with st.expander("Detalhe tecnico seguro"):
+        st.code(f"{type(error).__name__}: {error.__class__.__module__}")
+
+
+def verify_database_or_stop() -> bool:
+    try:
+        engine = get_engine()
+        with engine.connect() as conn:
+            conn.execute(text("SELECT 1"))
+        init_db()
+        return True
+    except (OperationalError, SQLAlchemyError, OSError) as exc:
+        render_database_error(exc)
+        return False
+
+
+def database_is_postgres() -> bool:
+    return get_database_url().startswith("postgresql+psycopg://")
+
+
+def database_label() -> str:
+    return "Neon/PostgreSQL" if database_is_postgres() else "SQLite local"
 
 
 @st.cache_resource
 def get_engine() -> Engine:
     database_url = get_database_url()
-    return create_engine(database_url, pool_pre_ping=True)
+    connect_args: dict[str, Any] = {}
+    if database_url.startswith("postgresql+psycopg://"):
+        connect_args = {"connect_timeout": 10}
+    return create_engine(database_url, pool_pre_ping=True, connect_args=connect_args)
 
 
 def init_db() -> None:
@@ -605,17 +675,19 @@ def delete_button(table: Table, current: dict[str, Any] | None, key_prefix: str)
 
 
 def main() -> None:
-    init_db()
-
     st.sidebar.image(str(ROOT / "assets" / "icon-192.png"), width=90)
     st.sidebar.title("JuAvila Clube")
+
+    if not verify_database_or_stop():
+        st.stop()
+
     page = st.sidebar.radio(
         "Navegacao",
         ["Inicio", "Cadastro", "Carteirinha", "Vantagens", "Parceiros", "Eventos", "Admin"],
     )
 
-    if "postgresql" in get_database_url():
-        st.sidebar.success("Conectado ao Neon/PostgreSQL")
+    if database_is_postgres():
+        st.sidebar.success(f"Conectado ao {database_label()}")
     else:
         st.sidebar.warning("Modo local SQLite. Configure DATABASE_URL para usar Neon.")
 
