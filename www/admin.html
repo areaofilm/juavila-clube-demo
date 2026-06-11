@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#17120f" />
+    <title>Painel Administrativo | JuAvila Clube</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./data.js" defer></script>
+    <script src="./admin.js" defer></script>
+  </head>
+  <body class="admin-page">
+    <header class="admin-topbar">
+      <div>
+        <p class="eyebrow">Administrativo</p>
+        <h1>JuAvila Clube</h1>
+      </div>
+      <nav class="admin-actions" aria-label="Acoes administrativas">
+        <a class="secondary-action" href="./index.html">Ver site/app</a>
+        <button class="secondary-action" type="button" data-admin-action="export">Exportar dados</button>
+        <button class="secondary-action danger" type="button" data-admin-action="reset">Reiniciar demo</button>
+      </nav>
+    </header>
+
+    <main class="admin-layout">
+      <section class="admin-summary" aria-label="Resumo do app">
+        <article>
+          <span id="stat-users">0</span>
+          <strong>usuarios</strong>
+        </article>
+        <article>
+          <span id="stat-promotions">0</span>
+          <strong>promocoes</strong>
+        </article>
+        <article>
+          <span id="stat-partners">0</span>
+          <strong>parceiros</strong>
+        </article>
+        <article>
+          <span id="stat-events">0</span>
+          <strong>eventos</strong>
+        </article>
+      </section>
+
+      <section class="admin-card">
+        <div class="admin-section-title">
+          <div>
+            <p class="eyebrow">Cadastros do app</p>
+            <h2>Usuarios e telefones</h2>
+          </div>
+          <a class="mini-action ghost" href="./index.html?screen=register">Novo cadastro</a>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Telefone</th>
+                <th>E-mail</th>
+                <th>Cidade</th>
+                <th>Pontos</th>
+                <th>Cadastro</th>
+              </tr>
+            </thead>
+            <tbody id="users-table"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="admin-grid">
+        <article class="admin-card">
+          <div class="admin-section-title">
+            <div>
+              <p class="eyebrow">Vantagens</p>
+              <h2>Promocoes e cupons</h2>
+            </div>
+            <button class="mini-action ghost" type="button" data-clear-form="promotion">Novo</button>
+          </div>
+          <form class="admin-form" data-form="promotion">
+            <input type="hidden" name="id" />
+            <label>Titulo <input name="title" required placeholder="10% de desconto em toda loja" /></label>
+            <label>Tipo
+              <select name="type">
+                <option>Descontos</option>
+                <option>Cupons</option>
+                <option>Parceiros</option>
+              </select>
+            </label>
+            <label>Selo <input name="badge" required placeholder="10%" /></label>
+            <label>Validade <input name="expires" required placeholder="30/06/2026" /></label>
+            <label class="wide">Descricao <textarea name="desc" required placeholder="Detalhe da promocao"></textarea></label>
+            <label class="toggle-line"><input name="active" type="checkbox" checked /> Ativo no app</label>
+            <button class="primary-action" type="submit">Salvar promocao</button>
+          </form>
+          <div class="admin-list" id="promotions-list"></div>
+        </article>
+
+        <article class="admin-card">
+          <div class="admin-section-title">
+            <div>
+              <p class="eyebrow">Rede do clube</p>
+              <h2>Parceiros</h2>
+            </div>
+            <button class="mini-action ghost" type="button" data-clear-form="partner">Novo</button>
+          </div>
+          <form class="admin-form" data-form="partner">
+            <input type="hidden" name="id" />
+            <label>Nome <input name="name" required placeholder="Restaurante Sabor do Campo" /></label>
+            <label>Categoria <input name="kind" required placeholder="Restaurante" /></label>
+            <label class="wide">Beneficio <input name="benefit" required placeholder="10% de desconto" /></label>
+            <label>Localizacao <input name="distance" placeholder="1,2 km" /></label>
+            <label class="toggle-line"><input name="active" type="checkbox" checked /> Ativo no app</label>
+            <button class="primary-action" type="submit">Salvar parceiro</button>
+          </form>
+          <div class="admin-list" id="partners-list"></div>
+        </article>
+
+        <article class="admin-card">
+          <div class="admin-section-title">
+            <div>
+              <p class="eyebrow">Agenda</p>
+              <h2>Eventos</h2>
+            </div>
+            <button class="mini-action ghost" type="button" data-clear-form="event">Novo</button>
+          </div>
+          <form class="admin-form" data-form="event">
+            <input type="hidden" name="id" />
+            <label>Titulo <input name="title" required placeholder="Cavalagada do Batom" /></label>
+            <label>Data <input name="date" required placeholder="15 jun | 2026" /></label>
+            <label class="wide">Descricao <textarea name="desc" required placeholder="Detalhe do evento"></textarea></label>
+            <label class="toggle-line"><input name="featured" type="checkbox" /> Destaque principal</label>
+            <label class="toggle-line"><input name="active" type="checkbox" checked /> Ativo no app</label>
+            <button class="primary-action" type="submit">Salvar evento</button>
+          </form>
+          <div class="admin-list" id="events-list"></div>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>

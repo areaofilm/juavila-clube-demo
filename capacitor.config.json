@@ -1,0 +1,11 @@
+{
+  "appId": "br.com.juavila.clube",
+  "appName": "Clube Cavalagada do Batom",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "android": {
+    "allowMixedContent": false,
+    "captureInput": true,
+    "webContentsDebuggingEnabled": false
+  }
+}

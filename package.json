@@ -1,0 +1,22 @@
+{
+  "name": "juavila-clube",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Clube de vantagens da JuAvila Selaria para a Cavalagada do Batom.",
+  "scripts": {
+    "serve": "python -m http.server 4173 --bind 127.0.0.1",
+    "sync:www": "scripts\\sync-www.cmd",
+    "serve:www": "scripts\\sync-www.cmd && python -m http.server 4173 --bind 127.0.0.1 --directory www",
+    "cap:init": "npx cap init \"Clube Cavalagada do Batom\" \"br.com.juavila.clube\" --web-dir www",
+    "cap:add:android": "npx cap add android",
+    "cap:sync": "scripts\\sync-www.cmd && npx cap sync android",
+    "cap:open": "scripts\\sync-www.cmd && npx cap open android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.0.0",
+    "@capacitor/core": "^7.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.0.0"
+  }
+}
