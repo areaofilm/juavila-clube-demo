@@ -13,16 +13,36 @@ https://github.com/areaofilm/juavila-clube-demo
 3. Escolha o repositorio `areaofilm/juavila-clube-demo`.
 4. Branch: `main`.
 5. Main file path: `streamlit_app.py`.
-6. Clique em `Deploy`.
+6. Antes de clicar em `Deploy`, abra `Advanced settings` e cole os Secrets abaixo.
+7. Clique em `Deploy`.
+
+## Secrets obrigatorios para producao
+
+No painel de Secrets do Streamlit Cloud:
+
+```toml
+DATABASE_URL = "postgresql://USUARIO:SENHA@HOST.neon.tech/NOME_DO_BANCO?sslmode=require"
+ADMIN_PASSWORD = "uma-senha-forte-do-admin"
+```
+
+Use a connection string da Neon. O app cria automaticamente as tabelas:
+
+- `club_users`
+- `club_promotions`
+- `club_partners`
+- `club_events`
+
+Se `DATABASE_URL` nao existir, o app entra em modo SQLite local apenas para teste.
 
 ## Arquivos que o Streamlit usa
 
-- `streamlit_app.py`: entrada principal do Streamlit.
+- `streamlit_app.py`: entrada principal do Streamlit, com app, painel admin e banco.
 - `requirements.txt`: dependencias Python.
 - `.streamlit/config.toml`: tema e static serving.
-- `index.html`, `admin.html`, `styles.css`, `app.js`, `admin.js`, `data.js`: app e painel embutidos no Streamlit.
+- `.streamlit/secrets.example.toml`: modelo de secrets, sem credenciais reais.
 
 ## Observacao importante
 
-No Streamlit, o app funciona como demo/vitrine dentro de um componente HTML.
-Para instalacao PWA real pelo celular, use uma hospedagem estatica com HTTPS, como Netlify, Vercel ou GitHub Pages, pois o `manifest.json` e o `service-worker.js` precisam operar na raiz publica do site.
+Esta versao Streamlit e funcional com banco Neon. Para instalacao PWA real pelo celular,
+use tambem uma hospedagem estatica com HTTPS, como Netlify, Vercel ou GitHub Pages,
+pois o `manifest.json` e o `service-worker.js` precisam operar na raiz publica do site.

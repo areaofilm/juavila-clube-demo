@@ -1,6 +1,12 @@
 # Clube Cavalagada do Batom
 
-Protótipo navegável e base inicial para publicação do clube de vantagens da JuAvila Selaria, inspirado na arte `Ideia de App.png`.
+Aplicação web do clube de vantagens da JuAvila Selaria, com cadastro de participantes, carteirinha, cupons, parceiros, eventos e painel administrativo. A versão Streamlit usa banco PostgreSQL da Neon via `DATABASE_URL`.
+
+Repositorio:
+
+```text
+https://github.com/areaofilm/juavila-clube-demo
+```
 
 ## Como abrir o site
 
@@ -9,6 +15,22 @@ Com o servidor local ligado, acesse:
 ```text
 http://127.0.0.1:4173
 ```
+
+## Rodar a versão profissional Streamlit
+
+```powershell
+pip install -r requirements.txt
+streamlit run streamlit_app.py
+```
+
+Para usar Neon, configure:
+
+```toml
+DATABASE_URL = "postgresql://USUARIO:SENHA@HOST.neon.tech/NOME_DO_BANCO?sslmode=require"
+ADMIN_PASSWORD = "uma-senha-forte"
+```
+
+No Streamlit Cloud esses valores entram em `Advanced settings > Secrets`.
 
 Painel administrativo:
 
@@ -48,6 +70,17 @@ http://127.0.0.1:4173?screen=profile
 - Ícones de app em PNG.
 - Política de privacidade e termos de uso em HTML.
 - Configuração inicial para empacotar com Capacitor.
+
+## O que a versão Streamlit já faz com banco
+
+- Cria automaticamente tabelas no Neon/PostgreSQL.
+- Salva usuários com telefone, e-mail, cidade e pontuação.
+- Exibe carteirinha e pontuação.
+- Lista vantagens, parceiros e eventos ativos.
+- Registra uso de cupom e participação em evento somando pontos.
+- Protege o painel admin por senha.
+- Admin cria, edita, ativa/desativa e exclui promoções, parceiros e eventos.
+- Admin visualiza todos os usuários cadastrados.
 
 ## Instalação sem Play Store
 
