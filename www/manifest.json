@@ -1,7 +1,7 @@
 {
   "name": "Clube Cavalagada do Batom",
   "short_name": "JuAvila Clube",
-  "description": "Demo do clube de vantagens da JuAvila Selaria para participantes da Cavalagada do Batom.",
+  "description": "App oficial do clube de vantagens da JuAvila Selaria para participantes da Cavalagada do Batom.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

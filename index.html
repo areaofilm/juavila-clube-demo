@@ -7,68 +7,77 @@
     <title>Clube Cavalagada do Batom</title>
     <link rel="manifest" href="./manifest.json" />
     <link rel="stylesheet" href="./styles.css" />
-    <script src="./data.js" defer></script>
-    <script src="./app.js" defer></script>
   </head>
-  <body>
-    <main class="demo-shell">
-      <section class="device-area" aria-label="App Clube Cavalagada do Batom">
-        <div class="phone-frame">
-          <div class="phone-glass">
-            <div class="phone-status" aria-hidden="true">
-              <span>9:41</span>
-              <span class="status-dots">5G 100%</span>
-            </div>
-            <div id="app" class="app-screen"></div>
+  <body class="official-site">
+    <main class="official-shell">
+      <section class="official-hero">
+        <img class="official-art" src="./assets/ideia-de-app.png" alt="Clube de Vantagens JuAvila Selaria" />
+        <div class="official-copy">
+          <p class="eyebrow">App oficial</p>
+          <h1>Clube Cavalagada do Batom</h1>
+          <p>
+            Carteirinha digital, cadastro de participantes, cupons, parceiros, eventos
+            e painel administrativo conectados ao banco Neon.
+          </p>
+          <div class="official-actions">
+            <a class="primary-action official-main-action" href="https://juavila-clube-demo.streamlit.app/">
+              Abrir app oficial
+            </a>
+            <button class="secondary-action" type="button" id="installButton">
+              Instalar no celular
+            </button>
+            <a class="secondary-action" href="https://juavila-clube-demo.streamlit.app/">
+              Painel administrativo
+            </a>
           </div>
+          <p class="official-note">
+            Para instalar: abra esta pagina no Chrome/Edge do celular e toque em
+            "Instalar no celular". Se o navegador nao mostrar o aviso, use o menu
+            do navegador e escolha "Adicionar a tela inicial".
+          </p>
         </div>
       </section>
 
-      <aside class="demo-panel" aria-label="Site de download do app">
-        <img class="brand-reference" src="./assets/ideia-de-app.png" alt="Arte de referencia do Clube de Vantagens Cavalagada do Batom" />
-        <div class="panel-copy">
-          <p class="eyebrow">Instale sem Play Store</p>
-          <h1>Clube Cavalagada do Batom</h1>
-          <p>
-            A pagina oficial para clientes instalarem o app, criarem cadastro e acessarem
-            carteirinha, cupons, parceiros, eventos e pontuacao.
-          </p>
-          <div class="panel-actions">
-            <button class="secondary-action primary-download" type="button" data-install-app>
-              <span aria-hidden="true">▯</span>
-              Instalar app no celular
-            </button>
-            <a class="secondary-action" href="./admin.html">
-              Painel administrativo
-            </a>
-            <a class="secondary-action" href="./store/release-checklist.md" download>
-              Baixar pacote tecnico
-            </a>
-            <button class="secondary-action" type="button" data-demo-action="reset">
-              <span aria-hidden="true">↻</span>
-              Reiniciar demo
-            </button>
-          </div>
-          <div class="site-feature-grid">
-            <div>
-              <strong>Cadastro pelo app</strong>
-              <span>Nome, telefone, e-mail e cidade aparecem no painel.</span>
-            </div>
-            <div>
-              <strong>Edicao pelo admin</strong>
-              <span>Parceiros, promocoes e eventos entram no app na hora.</span>
-            </div>
-            <div>
-              <strong>Sem loja de apps</strong>
-              <span>Instalacao como PWA pelo navegador do celular.</span>
-            </div>
-          </div>
-          <div class="legal-links" aria-label="Links legais">
-            <a href="./privacy.html">Politica de privacidade</a>
-            <a href="./terms.html">Termos de uso</a>
-          </div>
-        </div>
-      </aside>
+      <section class="official-grid">
+        <article>
+          <strong>Banco Neon</strong>
+          <span>Cadastros e conteudos salvos em PostgreSQL.</span>
+        </article>
+        <article>
+          <strong>Admin profissional</strong>
+          <span>Gerencie usuarios, telefones, parceiros, promocoes e eventos.</span>
+        </article>
+        <article>
+          <strong>Sem Play Store</strong>
+          <span>Cliente instala pelo navegador e acessa o app oficial.</span>
+        </article>
+      </section>
     </main>
+
+    <script>
+      const appUrl = "https://juavila-clube-demo.streamlit.app/";
+      let deferredInstallPrompt = null;
+
+      window.addEventListener("beforeinstallprompt", (event) => {
+        event.preventDefault();
+        deferredInstallPrompt = event;
+      });
+
+      document.querySelector("#installButton").addEventListener("click", async () => {
+        if (deferredInstallPrompt) {
+          deferredInstallPrompt.prompt();
+          await deferredInstallPrompt.userChoice;
+          deferredInstallPrompt = null;
+          return;
+        }
+        alert("No celular, abra o menu do navegador e toque em 'Adicionar a tela inicial' ou 'Instalar app'.");
+      });
+
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("./service-worker.js").catch(() => {});
+        });
+      }
+    </script>
   </body>
 </html>
